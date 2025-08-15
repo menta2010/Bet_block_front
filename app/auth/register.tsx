@@ -1,8 +1,17 @@
 // app/auth/register.tsx
 import { useEffect, useRef, useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, StyleSheet, Animated, Image } from "react-native";
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Animated,
+  Image,
+  useWindowDimensions,
+} from "react-native";
 import { Link, useRouter } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import Screen from "@src/ui/Screen";
 import Card from "@src/ui/Card";
@@ -15,6 +24,9 @@ import { useAuth, registerApi, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
 
 export default function Register() {
+  const { width } = useWindowDimensions();
+  const logoSize = Math.min(Math.round(width * 0.48), 220);
+
   const { setToken } = useAuth();
   const router = useRouter();
 
@@ -26,6 +38,7 @@ export default function Register() {
 
   const fade = useRef(new Animated.Value(0)).current;
   const slide = useRef(new Animated.Value(12)).current;
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fade, { toValue: 1, duration: 450, useNativeDriver: true }),
@@ -53,33 +66,46 @@ export default function Register() {
     <Screen padded={false}>
       <GradientBackground />
 
-      <KeyboardAvoidingView behavior={Platform.select({ ios: "padding" })} style={{ flex: 1 }}>
+      <KeyboardAvoidingView
+        behavior={Platform.select({ ios: "padding", android: undefined })}
+        style={{ flex: 1 }}
+      >
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-          <View style={{ alignItems: "center", marginTop: spacing(10) }}>
+          {/* HERO (logo + subtítulo) – mesmo respiro do login */}
+          <View style={styles.hero}>
             <Image
               source={require("../../assets/branding/logo3.png")}
-              style={{ width: 300, height: 300, marginBottom: spacing(3) }}
+              style={{ width: logoSize, height: logoSize, marginBottom: 4 }}
               resizeMode="contain"
             />
-            {/* Ou o ícone:
-            <MaterialCommunityIcons name="dice-multiple" size={64} color={colors.brand} />
-            */}
-            <Text style={{ color: colors.subtext, marginTop: spacing(1) }}>
-              Comece agora sua jornada de controle.
+            <Text style={styles.subtitle}>
+              Crie sua conta e comece a controlar suas apostas.
             </Text>
           </View>
 
-          <Card style={[styles.card]}>
-            <H1 style={{ textAlign: "center", marginBottom: spacing(6), color: colors.brand }}>
+          <Card style={[styles.card, { marginTop: 14 }]}>
+            <H1 style={{ textAlign: "center", marginBottom: 20 /* igual ao login */ }}>
               Criar conta
             </H1>
 
             <Input label="Nome" value={nome} onChangeText={setNome} />
-            <Input label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
-            <Input label="Senha" value={senha} onChangeText={setSenha} secureTextEntry secureToggle />
+            <Input
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <Input
+              label="Senha"
+              value={senha}
+              onChangeText={setSenha}
+              secureTextEntry
+              secureToggle
+            />
 
             {errorMsg ? (
-              <Text style={{ color: colors.danger, marginBottom: spacing(2) }}>{errorMsg}</Text>
+              <Text style={{ color: colors.danger, marginBottom: 8 }}>{errorMsg}</Text>
             ) : null}
 
             <Button
@@ -87,10 +113,10 @@ export default function Register() {
               onPress={onRegister}
               loading={loading}
               leftIcon={<Ionicons name="person-add" size={20} color="#FFFFFF" />}
-              variant="secondary"
+              style={{ marginTop: 8, backgroundColor: "#3FA285" }} // mesmo verde do login
             />
 
-            <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
+            <Note style={{ textAlign: "center", marginTop: 16 }}>
               Já tem conta?{" "}
               <Link href="/auth/login" style={{ color: colors.brand }}>
                 Entrar
@@ -105,6 +131,20 @@ export default function Register() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center" },
+  hero: {
+    alignItems: "center",
+    marginTop: 12,
+    paddingHorizontal: 16,
+  },
+  subtitle: {
+    color: colors.subtext,
+    textAlign: "center",
+    marginTop: 4,
+    lineHeight: 20,
+    maxWidth: 360,
+    fontSize: 16,
+    fontWeight: "500",
+  },
   card: {
     marginTop: spacing(6),
     width: "92%",

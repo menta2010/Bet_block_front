@@ -55,30 +55,34 @@ export default function Login() {
   };
 
   return (
-    <Screen padded={false}>
-      {/* fundo com gradiente */}
+<Screen padded={false}>
       <GradientBackground />
 
       <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })} style={{ flex: 1 }}>
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-          {/* Topo: logo + frase */}
-          <View style={{ alignItems: "center", marginTop: spacing(4) }}>
+
+          {/* === HERO (logo + subtítulo) com respiro menor === */}
+          <View style={styles.hero}>
             <Image
               source={require("../../assets/branding/logo3.png")}
-              style={{
-                width: logoSize,
-                height: logoSize,
-                marginBottom: 6 // antes spacing(3)
-              }}
+              style={{ width: logoSize, height: logoSize, marginBottom: 4 }}
               resizeMode="contain"
             />
-             <Text style={{ color: colors.subtext, marginTop: 2, textAlign: "center" }}numberOfLines={2}>
-              Controle suas apostas, controle seu futuro.
-            </Text>
+           <Text
+                    style={{
+                      color: colors.subtext,
+                      marginTop: spacing(0),
+                      textAlign: "center",
+                      fontSize: 16, // aumentei de 14 → 16
+                      fontWeight: "500", // mais destaque
+                    }}
+                  >
+            Controle suas apostas, controle seu futuro.
+          </Text>
           </View>
 
-          <Card style={[styles.card, isWide && { width: 520 }, { marginTop: 16 /* antes spacing(6) */ }]}>
-            <H1 style={{ textAlign: "center", marginBottom: 20, color: colors.brand }}>
+          <Card style={[styles.card, isWide && { width: 520 }, { marginTop: 14 }]}>
+            <H1 style={{ textAlign: "center", marginBottom: 20 }}>
               Entrar
             </H1>
 
@@ -98,21 +102,20 @@ export default function Login() {
             />
 
             {errorMsg ? (
-              <Text style={{ color: colors.danger, marginBottom: spacing(2) }}>
+              <Text style={{ color: colors.danger, marginBottom: 8 }}>
                 {errorMsg}
               </Text>
             ) : null}
 
-            {/* ===== 5) Botão com ícone ===== */}
             <Button
               title="Login"
               onPress={onLogin}
               loading={loading}
-              leftIcon={<Ionicons name="lock-closed" size={20} color={colors.white} />}
-              style={{ marginTop: spacing(2) }}
+              leftIcon={<Ionicons name="lock-closed" size={20} color="#FFFFFF" />}
+              style={{ marginTop: 8 ,  backgroundColor: "#3FA285", }}
             />
 
-            <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
+            <Note style={{ textAlign: "center", marginTop: 16 }}>
               Não tem conta?{" "}
               <Link href="/auth/register" style={{ color: colors.brand }}>
                 Crie agora
@@ -127,10 +130,27 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center" },
+
+  // novo: menos respiro e centralização certinha
+  hero: {
+    alignItems: "center",
+    marginTop: 12,           // ↓ antes era spacing(4)
+    paddingHorizontal: 16,
+  },
+  subtitle: {
+    color: colors.subtext,
+    textAlign: "center",
+    marginTop: 4,            // ↓ antes era 2~6
+    lineHeight: 20,
+    maxWidth: 360,
+  },
+
   card: {
-    marginTop: spacing(6),
+    marginTop: 18,           // ↓ antes spacing(6)
     width: "92%",
     borderRadius: 18,
     ...shadow,
   },
 });
+
+
