@@ -6,6 +6,12 @@ import Button from "@src/ui/Button";
 import Input from "@src/ui/Input";
 import { colors, radius, spacing, shadow } from "@src/theme";
 import { useAuth, loginApi } from "@src/auth/useAuth";
+import { getErrorMessage } from '@src/utils/getErrorMessage';
+import Card from "@src/ui/Card";
+import { H1, Note } from "@src/ui/Typography";// <- certo
+import { Link, router } from "expo-router";
+
+
 
 export default function Login() {
   const { width } = useWindowDimensions();
@@ -25,23 +31,23 @@ export default function Login() {
       await setToken(access_token);
       router.replace("/tabs");
     } catch (e: any) {
-      alert(e?.response?.data?.detail ?? "Falha no login");
+        alert(getErrorMessage(e));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Screen>
-      <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })} style={styles.center}>
-        <View style={[styles.card, isWide && styles.cardWide]}>
-          <Text style={styles.title}>Entrar</Text>
-          <Input placeholder="Email" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} />
-          <Input placeholder="Senha" secureTextEntry value={senha} onChangeText={setSenha} />
-          <Button title="Login" onPress={handleLogin} loading={loading} />
-          <Button title="Criar conta" variant="ghost" onPress={() => router.replace("/auth/register")} />
-        </View>
-      </KeyboardAvoidingView>
+ <Screen>
+      <Card style={{ marginTop: spacing(14) }}>
+        <H1 style={{ textAlign: "center", marginBottom: spacing(6), color: colors.brand }}>Entrar</H1>
+        <Input label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+        <Input label="Senha" value={senha} onChangeText={setSenha} secureTextEntry secureToggle />
+        <Button title="Login" onPress={handleLogin} loading={loading} style={{ marginTop: spacing(2) }} />
+        <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
+          Não tem conta? <Link href="/auth/register" style={{ color: colors.brand }}>Crie agora</Link>
+        </Note>
+      </Card>
     </Screen>
   );
 }

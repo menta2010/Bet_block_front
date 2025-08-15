@@ -1,35 +1,53 @@
-import { Pressable, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from "react-native";
-import { colors, radius, spacing, shadow } from "@src/theme";
+// src/ui/Button.tsx
+import { ActivityIndicator, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { colors, radius, spacing } from "@src/theme";
 
-type Props = {
+type Variant = "primary" | "secondary" | "ghost";
+
+export default function Button({
+  title, onPress, disabled, loading, variant = "primary", style,
+}: {
   title: string;
-  onPress: () => void;
-  loading?: boolean;
+  onPress?: () => void;
   disabled?: boolean;
-  variant?: "primary" | "ghost";
+  loading?: boolean;
+  variant?: Variant;
   style?: ViewStyle;
-  textStyle?: TextStyle;
-};
+}) {
+  const bg =
+    variant === "primary"   ? colors.accent :
+    variant === "secondary" ? colors.brand  :
+    "transparent";
 
-export default function Button({ title, onPress, loading, disabled, variant = "primary", style, textStyle }: Props) {
-  const isDisabled = disabled || loading;
-  const base = [styles.base, variant === "ghost" ? styles.ghost : styles.primary, style, isDisabled && styles.disabled];
+  const fg =
+    variant === "primary"   ? colors.text   :      // texto escuro no laranja pastel
+    variant === "secondary" ? "#FFFFFF"     :      // texto claro no verde brand
+    colors.text;
+
   return (
-    <Pressable onPress={onPress} disabled={isDisabled} style={base}>
-      {loading ? <ActivityIndicator color="#fff" /> : <Text style={[styles.text, textStyle]}>{title}</Text>}
+    <Pressable
+      onPress={onPress}
+      disabled={disabled || loading}
+      android_ripple={{ color: "#00000010" }}
+      style={({ pressed }) => [
+        styles.base,
+        { backgroundColor: bg, opacity: pressed || disabled ? 0.8 : 1 },
+        variant === "ghost" && { borderWidth: 1, borderColor: colors.border },
+        style,
+      ]}
+    >
+      {loading ? <ActivityIndicator color={fg} /> : <Text style={[styles.label, { color: fg }]}>{title}</Text>}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   base: {
-    borderRadius: radius.md,
-    paddingVertical: spacing(3),
+    height: 52,
+    borderRadius: radius.lg,
     alignItems: "center",
-    ...shadow,
+    justifyContent: "center",
+    paddingHorizontal: spacing(6),
   },
-  primary: { backgroundColor: colors.primary },
-  ghost: { backgroundColor: "transparent", borderWidth: 1, borderColor: colors.border },
-  disabled: { opacity: 0.6 },
-  text: { color: "#fff", fontWeight: "700" },
+  label: { fontSize: 16, fontWeight: "700" },
 });

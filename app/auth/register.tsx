@@ -6,6 +6,7 @@ import Button from "@src/ui/Button";
 import Input from "@src/ui/Input";
 import { colors, radius, spacing, shadow } from "@src/theme";
 import { useAuth, registerApi, loginApi } from "@src/auth/useAuth";
+import { getErrorMessage } from '@src/utils/getErrorMessage';
 
 export default function Register() {
   const { width } = useWindowDimensions();
@@ -27,7 +28,7 @@ export default function Register() {
       await setToken(access_token);
       router.replace("/tabs");
     } catch (e: any) {
-      alert(e?.response?.data?.detail ?? "Não foi possível criar a conta");
+        alert(getErrorMessage(e));
     } finally {
       setLoading(false);
     }

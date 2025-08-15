@@ -3,10 +3,13 @@
     "name": "focai-blocker",
     "slug": "focai-blocker",
     "scheme": "focai",
-    "plugins": ["expo-router"],
-    "experiments": { "typedRoutes": true },
     "extra": {
       "EXPO_PUBLIC_API_BASE_URL": "http://192.168.15.98:8000"
+    },
+    "splash": {
+      "image": "./assets/branding/focai-logo.png",
+      "backgroundColor": "#EEF9F4",
+      "resizeMode": "contain"
     },
     "android": {
       "package": "com.seuorg.focaiblocker"
