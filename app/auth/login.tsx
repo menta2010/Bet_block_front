@@ -68,11 +68,11 @@ export default function Login() {
               style={{
                 width: logoSize,
                 height: logoSize,
-                marginBottom: spacing(0) // antes spacing(3)
+                marginBottom: 6 // antes spacing(3)
               }}
               resizeMode="contain"
             />
-             <Text style={{ color: colors.subtext, marginTop: spacing(0), textAlign: "center" }}>
+             <Text style={{ color: colors.subtext, marginTop: 2, textAlign: "center" }}numberOfLines={2}>
               Controle suas apostas, controle seu futuro.
             </Text>
           </View>
