@@ -2,28 +2,17 @@
   "expo": {
     "name": "focai-blocker",
     "slug": "focai-blocker",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
+    "scheme": "focai",
+    "plugins": ["expo-router"],
+    "experiments": { "typedRoutes": true },
+    "extra": {
+      "EXPO_PUBLIC_API_BASE_URL": "http://192.168.15.98:8000"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      "package": "com.seuorg.focaiblocker"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "ios": {
+      "bundleIdentifier": "com.seuorg.focaiblocker"
     }
   }
 }
