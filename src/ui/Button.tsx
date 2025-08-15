@@ -1,11 +1,12 @@
 // src/ui/Button.tsx
-import { ActivityIndicator, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { colors, radius, spacing } from "@src/theme";
+import { ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
 
 export default function Button({
-  title, onPress, disabled, loading, variant = "primary", style,
+  title, onPress, disabled, loading, variant = "primary", style, leftIcon,
 }: {
   title: string;
   onPress?: () => void;
@@ -13,6 +14,7 @@ export default function Button({
   loading?: boolean;
   variant?: Variant;
   style?: ViewStyle;
+  leftIcon?: ReactNode;
 }) {
   const bg =
     variant === "primary"   ? colors.accent :
@@ -20,8 +22,8 @@ export default function Button({
     "transparent";
 
   const fg =
-    variant === "primary"   ? colors.text   :      // texto escuro no laranja pastel
-    variant === "secondary" ? "#FFFFFF"     :      // texto claro no verde brand
+    variant === "primary"   ? "#FFFFFF"   :
+    variant === "secondary" ? "#FFFFFF"     :
     colors.text;
 
   return (
@@ -31,12 +33,19 @@ export default function Button({
       android_ripple={{ color: "#00000010" }}
       style={({ pressed }) => [
         styles.base,
-        { backgroundColor: bg, opacity: pressed || disabled ? 0.8 : 1 },
+        { backgroundColor: bg, opacity: pressed || disabled ? 0.85 : 1 },
         variant === "ghost" && { borderWidth: 1, borderColor: colors.border },
         style,
       ]}
     >
-      {loading ? <ActivityIndicator color={fg} /> : <Text style={[styles.label, { color: fg }]}>{title}</Text>}
+      {loading ? (
+        <ActivityIndicator color={fg} />
+      ) : (
+        <View style={styles.content}>
+          {leftIcon ? <View style={{ marginRight: spacing(2) }}>{leftIcon}</View> : null}
+          <Text style={[styles.label, { color: fg }]}>{title}</Text>
+        </View>
+      )}
     </Pressable>
   );
 }
@@ -49,5 +58,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: spacing(6),
   },
+  content: { flexDirection: "row", alignItems: "center", justifyContent: "center" },
   label: { fontSize: 16, fontWeight: "700" },
 });
