@@ -29,6 +29,7 @@ export default function Input({
   const [focused, setFocused] = useState(false);
   const [hidden, setHidden] = useState(!!secureTextEntry);
 
+  // Mostra "Mostrar/Ocultar" só se houver texto
   const showToggle =
     !!secureToggle && typeof value === "string" && value.length > 0;
 
@@ -44,7 +45,7 @@ export default function Input({
   const containerStyle = useMemo(
     () => [
       styles.inputContainer,
-      focused && styles.inputFocused, // só troca cor da borda/sombra iOS (sem alterar altura)
+      focused && styles.inputFocused,
       style,
     ],
     [focused, style]
@@ -66,13 +67,19 @@ export default function Input({
           onFocus={handleFocus}
           onBlur={handleBlur}
           value={value}
-          selectionColor={colors.brandDark}
+          selectionColor={colors.brandDark} // cursor/seleção verde-escuro
           {...rest}
         />
 
         {showToggle && (
-          <Pressable onPress={() => setHidden((p) => !p)} hitSlop={8} style={styles.toggle}>
-            <Text style={styles.toggleText}>{hidden ? "Mostrar" : "Ocultar"}</Text>
+          <Pressable
+            onPress={() => setHidden((p) => !p)}
+            hitSlop={8}
+            style={styles.toggle}
+          >
+            <Text style={styles.toggleText}>
+              {hidden ? "Mostrar" : "Ocultar"}
+            </Text>
           </Pressable>
         )}
       </View>
@@ -80,7 +87,7 @@ export default function Input({
   );
 }
 
-const HEIGHT = 56;
+const HEIGHT = 26; // altura confortável e padrão
 
 const styles = StyleSheet.create({
   label: {
@@ -88,16 +95,20 @@ const styles = StyleSheet.create({
     marginBottom: spacing(1),
     fontWeight: "600",
   },
+
+  // A BORDA fica aqui no container
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: radius.lg,
     backgroundColor: "#fff",
+    borderRadius: radius.md,
     borderWidth: 1.5,
     borderColor: colors.border,
     paddingHorizontal: spacing(3),
-    height: HEIGHT, 
+    minHeight: HEIGHT,
   },
+
+  // Estado focado (sem mudar altura)
   inputFocused: {
     borderColor: colors.brand,
     borderWidth: 2,
@@ -109,16 +120,24 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
       },
       android: {
-      borderColor: colors.brandDark, 
+        borderColor: colors.brandDark,
+        // ripple visual já vem do sistema nos botões; aqui só borda mesmo
       },
     }),
   },
+
+  // O TextInput em si NÃO tem borda nem radius
   input: {
     flex: 1,
     color: colors.text,
+    fontSize: 16,
     paddingVertical: 0,
-    height: HEIGHT - 1.5 * 2, // mantém o cursor estável
+    height: 48, // deixa o cursor estável e o campo mais “slim”
+    ...Platform.select({
+      android: { textAlignVertical: "center", includeFontPadding: false },
+    }),
   },
+
   toggle: {
     paddingLeft: spacing(2),
     paddingVertical: spacing(1),
