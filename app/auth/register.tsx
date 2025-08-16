@@ -22,6 +22,7 @@ import { H1, Note } from "@src/ui/Typography";
 import { colors, spacing, shadow } from "@src/theme";
 import { useAuth, registerApi, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
+import GoogleButton from "@src/ui/GoogleButton";
 
 export default function Register() {
   const { width } = useWindowDimensions();
@@ -121,25 +122,18 @@ export default function Register() {
             />
 
             {/* Divider "ou" */}
-   <View style={{ marginTop: 16, marginBottom: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
-  <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
-  <Text style={{ color: colors.subtext, fontWeight: "600" }}>ou</Text>
-  <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
-</View>
+              <View style={{ marginTop: 16, marginBottom: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+              <Text style={{ color: colors.subtext, fontWeight: "600" }}>ou</Text>
+              <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+            </View>
 
             {/* Botão Google (placeholder) */}
-            <Button
-              title="Continuar com Google"
-              onPress={onGooglePress}
-              leftIcon={<Ionicons name="logo-google" size={20} color="#DB4437" />}
-              style={{
-                backgroundColor: "#ffffffff",
-                borderWidth: 1,
-                borderColor: colors.border,
-                marginTop: spacing(1),
-              }}
-              textStyle={{ color: "#000", fontWeight: "600" }}
-            />
+              <GoogleButton
+                onPress={onGooglePress}        // sua função atual
+                style={{ marginTop: 12 }}      // opcional
+                // loading={isGoogleLoading}    // opcional
+              />
 
             <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
               Já tem conta?{" "}

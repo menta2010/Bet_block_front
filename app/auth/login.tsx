@@ -16,6 +16,7 @@ import { H1, Note } from "@src/ui/Typography";
 import { colors, spacing, shadow } from "@src/theme";
 import { useAuth, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
+import GoogleButton from "@src/ui/GoogleButton";
 
 export default function Login() {
   const { width } = useWindowDimensions();
