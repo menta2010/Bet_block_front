@@ -62,6 +62,11 @@ export default function Register() {
     }
   };
 
+  // Placeholder (a integração virá depois)
+  const onGooglePress = () => {
+    console.log("Google Register Pressed");
+  };
+
   return (
     <Screen padded={false}>
       <GradientBackground />
@@ -71,7 +76,7 @@ export default function Register() {
         style={{ flex: 1 }}
       >
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-          {/* HERO (logo + subtítulo) igual ao login */}
+          {/* Topo: logo + frase */}
           <View style={styles.hero}>
             <Image
               source={require("../../assets/branding/logo3.png")}
@@ -79,7 +84,7 @@ export default function Register() {
               resizeMode="contain"
             />
             <Text style={styles.subtitle}>
-                Crie sua conta e controle suas apostas.
+              Crie sua conta e controle suas apostas.
             </Text>
           </View>
 
@@ -105,7 +110,9 @@ export default function Register() {
             />
 
             {errorMsg ? (
-              <Text style={{ color: colors.danger, marginBottom: 8 }}>{errorMsg}</Text>
+              <Text style={{ color: colors.danger, marginBottom: spacing(2) }}>
+                {errorMsg}
+              </Text>
             ) : null}
 
             <Button
@@ -113,10 +120,39 @@ export default function Register() {
               onPress={onRegister}
               loading={loading}
               leftIcon={<Ionicons name="person-add" size={20} color="#FFFFFF" />}
-              style={{ marginTop: 8, backgroundColor: "#3FA285" }}
+              style={{ marginTop: spacing(2), backgroundColor: "#3FA285" }}
             />
 
-            <Note style={{ textAlign: "center", marginTop: 16 }}>
+            {/* Divider "ou" */}
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginVertical: spacing(3),
+              }}
+            >
+              <View style={{ flex: 1, height: 1, backgroundColor: "#ddd" }} />
+              <Text style={{ marginHorizontal: spacing(2), color: colors.subtext }}>
+                ou
+              </Text>
+              <View style={{ flex: 1, height: 1, backgroundColor: "#ddd" }} />
+            </View>
+
+            {/* Botão Google (placeholder) */}
+            <Button
+              title="Continuar com Google"
+              onPress={onGooglePress}
+              leftIcon={<Ionicons name="logo-google" size={20} color="#DB4437" />}
+              style={{
+                backgroundColor: "#ffffffff",
+                borderWidth: 1,
+                borderColor: colors.border,
+                marginTop: spacing(1),
+              }}
+              textStyle={{ color: "#000", fontWeight: "600" }}
+            />
+
+            <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
               Já tem conta?{" "}
               <Link href="/auth/login" style={{ color: colors.brand }}>
                 Entrar

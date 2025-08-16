@@ -1,12 +1,18 @@
-// src/ui/Button.tsx
-import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, View, ViewStyle, TextStyle } from "react-native";
 import { colors, radius, spacing } from "@src/theme";
 import { ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost";
 
 export default function Button({
-  title, onPress, disabled, loading, variant = "primary", style, leftIcon,
+  title,
+  onPress,
+  disabled,
+  loading,
+  variant = "primary",
+  style,
+  leftIcon,
+  textStyle, // 🔹 nova prop
 }: {
   title: string;
   onPress?: () => void;
@@ -15,6 +21,7 @@ export default function Button({
   variant?: Variant;
   style?: ViewStyle;
   leftIcon?: ReactNode;
+  textStyle?: TextStyle; // 🔹 permite sobrescrever estilo do texto
 }) {
   const bg =
     variant === "primary"   ? colors.accent :
@@ -23,7 +30,7 @@ export default function Button({
 
   const fg =
     variant === "primary"   ? "#FFFFFF"   :
-    variant === "secondary" ? "#FFFFFF"     :
+    variant === "secondary" ? "#FFFFFF"   :
     colors.text;
 
   return (
@@ -43,7 +50,8 @@ export default function Button({
       ) : (
         <View style={styles.content}>
           {leftIcon ? <View style={{ marginRight: spacing(2) }}>{leftIcon}</View> : null}
-          <Text style={[styles.label, { color: fg }]}>{title}</Text>
+          <Text style={[styles.label, { color: fg }, textStyle]}>{title}</Text>
+          {/* 🔹 textStyle sobrescreve se for passado */}
         </View>
       )}
     </Pressable>

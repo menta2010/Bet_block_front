@@ -31,6 +31,7 @@ export default function Login() {
 
   const fade = useRef(new Animated.Value(0)).current;
   const slide = useRef(new Animated.Value(12)).current;
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fade, { toValue: 1, duration: 450, useNativeDriver: true }),
@@ -51,6 +52,11 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // placeholder para futuro login com Google (apenas UI por enquanto)
+  const onGooglePress = () => {
+    // TODO: plugar lógica do Google aqui (ex: expo-auth-session / backend)
   };
 
   return (
@@ -83,6 +89,7 @@ export default function Login() {
               autoCapitalize="none"
               keyboardType="email-address"
             />
+
             <Input
               label="Senha"
               value={senha}
@@ -91,12 +98,20 @@ export default function Login() {
               secureToggle
             />
 
+            {/* link “Esqueceu sua senha?” alinhado à direita */}
+            <View style={{ alignItems: "flex-end", marginTop: 6, marginBottom: 8 }}>
+              <Link href="/auth/forgot" style={{ color: colors.brand, fontWeight: "600" }}>
+                Esqueceu sua senha?
+              </Link>
+            </View>
+
             {errorMsg ? (
               <Text style={{ color: colors.danger, marginBottom: 8 }}>
                 {errorMsg}
               </Text>
             ) : null}
 
+            {/* botão primário */}
             <Button
               title="Login"
               onPress={onLogin}
@@ -104,6 +119,30 @@ export default function Login() {
               leftIcon={<Ionicons name="lock-closed" size={20} color="#FFFFFF" />}
               style={{ marginTop: 8, backgroundColor: "#3FA285" }}
             />
+
+            {/* separador “ou” */}
+            <View style={styles.separator}>
+              <View style={styles.sepLine} />
+              <Text style={styles.sepText}>ou</Text>
+              <View style={styles.sepLine} />
+            </View>
+
+            {/* botão Google (UI) */}
+        <Button
+          title="Continuar com Google"
+          onPress={onGooglePress}
+          leftIcon={<Ionicons name="logo-google" size={20} color="#DB4437" />}
+          style={{
+            backgroundColor: "#fff",       // fundo branco padrão Google
+            borderWidth: 1,
+            borderColor: colors.border,
+            marginTop: 8,
+          }}
+          textStyle={{
+            color: "#000",                 // texto preto (padrão Google)
+            fontWeight: "600",
+          }}
+        />
 
             <Note style={{ textAlign: "center", marginTop: 16 }}>
               Não tem conta?{" "}
@@ -139,5 +178,22 @@ const styles = StyleSheet.create({
     width: "92%",
     borderRadius: 18,
     ...shadow,
+  },
+  separator: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 14,
+    marginBottom: 6,
+  },
+  sepLine: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+  },
+  sepText: {
+    color: colors.subtext,
+    fontWeight: "600",
+    fontSize: 12,
   },
 });
