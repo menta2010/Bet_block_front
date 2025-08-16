@@ -121,19 +121,11 @@ export default function Register() {
             />
 
             {/* Divider "ou" */}
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginVertical: spacing(3),
-              }}
-            >
-              <View style={{ flex: 1, height: 1, backgroundColor: "#ddd" }} />
-              <Text style={{ marginHorizontal: spacing(2), color: colors.subtext }}>
-                ou
-              </Text>
-              <View style={{ flex: 1, height: 1, backgroundColor: "#ddd" }} />
-            </View>
+   <View style={{ marginTop: 16, marginBottom: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
+  <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+  <Text style={{ color: colors.subtext, fontWeight: "600" }}>ou</Text>
+  <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+</View>
 
             {/* Botão Google (placeholder) */}
             <Button

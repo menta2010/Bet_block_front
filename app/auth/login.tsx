@@ -119,12 +119,11 @@ export default function Login() {
               style={{ marginTop: 16, backgroundColor: "#3FA285" }}
             />
 
-            {/* separador “ou” */}
-            <View style={styles.separator}>
-              <View style={styles.sepLine} />
-              <Text style={styles.sepText}>ou</Text>
-              <View style={styles.sepLine} />
-            </View>
+      <View style={{ marginTop: 16, marginBottom: 16, flexDirection: "row", alignItems: "center", gap: 12 }}>
+        <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+        <Text style={{ color: colors.subtext, fontWeight: "600" }}>ou</Text>
+        <View style={{ flex: 1, height: StyleSheet.hairlineWidth, backgroundColor: colors.border }} />
+      </View>
 
             {/* botão Google (UI) */}
         <Button
