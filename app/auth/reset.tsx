@@ -13,6 +13,7 @@ import { colors, spacing, shadow } from "@src/theme";
 import { resetPassword, requestPasswordResetCode } from "@src/auth/useAuth";
 import { Ionicons } from "@expo/vector-icons";
 import FormScroll from "@src/ui/FormScroll";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 
 export default function Reset() {
@@ -24,6 +25,7 @@ export default function Reset() {
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   // se veio da tela de "esqueci", manter o toast de sucesso (já acontece na transição)
   useEffect(() => {
@@ -72,14 +74,10 @@ export default function Reset() {
   };
 
   return (
-    <FormScroll>
+  
     <Screen padded={false}>
       <GradientBackground />
-
-      <KeyboardAvoidingView
-        behavior={Platform.select({ ios: "padding", android: undefined })}
-        style={{ flex: 1 }}
-      >
+      <FormScroll keyboardOffset={headerHeight}>
         <View style={styles.center}>
           {/* Logo */}
           <Image
@@ -133,9 +131,8 @@ export default function Reset() {
             </Note>
           </Card>
         </View>
-      </KeyboardAvoidingView>
-    </Screen>
     </FormScroll>
+    </Screen>
   );
 }
 

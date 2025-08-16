@@ -13,12 +13,14 @@ import { colors, spacing, shadow } from "@src/theme";
 import { requestPasswordResetCode } from "@src/auth/useAuth";
 import { Ionicons } from "@expo/vector-icons";
 import FormScroll from "@src/ui/FormScroll";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function Forgot() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const headerHeight = useHeaderHeight();
 
   const onSubmit = async () => {
     const v = email.trim();
@@ -48,14 +50,9 @@ export default function Forgot() {
   };
 
   return (
-     <FormScroll>
     <Screen padded={false}>
       <GradientBackground />
-
-      <KeyboardAvoidingView
-        behavior={Platform.select({ ios: "padding", android: undefined })}
-        style={{ flex: 1 }}
-      >
+      <FormScroll keyboardOffset={headerHeight}>
         <View style={styles.center}>
           {/* Logo */}
           <Image
@@ -104,9 +101,8 @@ export default function Forgot() {
             </Note>
           </Card>
         </View>
-      </KeyboardAvoidingView>
+      </FormScroll>
     </Screen>
-    </FormScroll>
   );
 }
 

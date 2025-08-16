@@ -12,7 +12,8 @@
       "resizeMode": "contain"
     },
     "android": {
-      "package": "com.seuorg.focaiblocker"
+      "package": "com.seuorg.focaiblocker",
+      "softwareKeyboardLayoutMode": "resize"
     },
     "ios": {
       "bundleIdentifier": "com.seuorg.focaiblocker"

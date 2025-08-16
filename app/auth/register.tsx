@@ -24,6 +24,7 @@ import { useAuth, registerApi, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
 import GoogleButton from "@src/ui/GoogleButton";
 import FormScroll from "@src/ui/FormScroll";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function Register() {
   const { width } = useWindowDimensions();
@@ -40,6 +41,7 @@ export default function Register() {
 
   const fade = useRef(new Animated.Value(0)).current;
   const slide = useRef(new Animated.Value(12)).current;
+  const headerHeight = useHeaderHeight();
 
   useEffect(() => {
     Animated.parallel([
@@ -70,14 +72,10 @@ export default function Register() {
   };
 
   return (
-     <FormScroll>
+
     <Screen padded={false}>
       <GradientBackground />
-
-      <KeyboardAvoidingView
-        behavior={Platform.select({ ios: "padding", android: undefined })}
-        style={{ flex: 1 }}
-      >
+        <FormScroll keyboardOffset={headerHeight}>
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
           {/* Topo: logo + frase */}
           <View style={styles.hero}>
@@ -145,9 +143,9 @@ export default function Register() {
             </Note>
           </Card>
         </Animated.View>
-      </KeyboardAvoidingView>
+      </FormScroll>
     </Screen>
-    </FormScroll>
+
   );
 }
 

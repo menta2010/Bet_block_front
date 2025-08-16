@@ -18,6 +18,7 @@ import { useAuth, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
 import GoogleButton from "@src/ui/GoogleButton";
 import FormScroll from "@src/ui/FormScroll";
+import { useHeaderHeight } from "@react-navigation/elements";
 
 export default function Login() {
   const { width } = useWindowDimensions();
@@ -25,6 +26,8 @@ export default function Login() {
   const { setToken } = useAuth();
   const router = useRouter();
   const logoSize = Math.min(Math.round(width * 0.48), 220);
+  const headerHeight = useHeaderHeight();
+
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -62,11 +65,10 @@ export default function Login() {
   };
 
   return (
-     <FormScroll>
+
     <Screen padded={false}>
       <GradientBackground />
-
-      <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })} style={{ flex: 1 }}>
+        <FormScroll keyboardOffset={headerHeight}>
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
           {/* HERO (logo + subtítulo) com respiro menor */}
           <View style={styles.hero}>
@@ -144,9 +146,9 @@ export default function Login() {
             </Note>
           </Card>
         </Animated.View>
-      </KeyboardAvoidingView>
+        </FormScroll>
     </Screen>
-    </FormScroll>
+
   );
 }
 
