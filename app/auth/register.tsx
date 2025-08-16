@@ -71,7 +71,7 @@ export default function Register() {
         style={{ flex: 1 }}
       >
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-          {/* HERO (logo + subtítulo) – mesmo respiro do login */}
+          {/* HERO (logo + subtítulo) igual ao login */}
           <View style={styles.hero}>
             <Image
               source={require("../../assets/branding/logo3.png")}
@@ -79,12 +79,12 @@ export default function Register() {
               resizeMode="contain"
             />
             <Text style={styles.subtitle}>
-              Crie sua conta e comece a controlar suas apostas.
+                Crie sua conta e controle suas apostas.
             </Text>
           </View>
 
           <Card style={[styles.card, { marginTop: 14 }]}>
-            <H1 style={{ textAlign: "center", marginBottom: 20 /* igual ao login */ }}>
+            <H1 style={{ textAlign: "center", marginBottom: 20 }}>
               Criar conta
             </H1>
 
@@ -113,7 +113,7 @@ export default function Register() {
               onPress={onRegister}
               loading={loading}
               leftIcon={<Ionicons name="person-add" size={20} color="#FFFFFF" />}
-              style={{ marginTop: 8, backgroundColor: "#3FA285" }} // mesmo verde do login
+              style={{ marginTop: 8, backgroundColor: "#3FA285" }}
             />
 
             <Note style={{ textAlign: "center", marginTop: 16 }}>

@@ -1,51 +1,130 @@
-import { forwardRef, useState } from "react";
-import { StyleSheet, Text, TextInput, TextInputProps, View } from "react-native";
-import { colors, radius, spacing } from "@src/theme";
+import React, { useMemo, useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TextInputProps,
+  Pressable,
+  StyleSheet,
+  Platform,
+} from "react-native";
+import { colors, spacing, radius } from "@src/theme";
 
-type Props = TextInputProps & { label?: string; error?: string; secureToggle?: boolean; };
+type Props = TextInputProps & {
+  label?: string;
+  secureToggle?: boolean;
+  value?: string;
+};
 
-const Input = forwardRef<TextInput, Props>(({ label, error, secureTextEntry, secureToggle, style, ...rest }, ref) => {
-  const [hide, setHide] = useState(!!secureTextEntry);
+export default function Input({
+  label,
+  secureTextEntry,
+  secureToggle,
+  value,
+  onFocus,
+  onBlur,
+  style,
+  ...rest
+}: Props) {
+  const [focused, setFocused] = useState(false);
+  const [hidden, setHidden] = useState(!!secureTextEntry);
+
+  const showToggle =
+    !!secureToggle && typeof value === "string" && value.length > 0;
+
+  const handleFocus = (e: any) => {
+    setFocused(true);
+    onFocus?.(e);
+  };
+  const handleBlur = (e: any) => {
+    setFocused(false);
+    onBlur?.(e);
+  };
+
+  const containerStyle = useMemo(
+    () => [
+      styles.inputContainer,
+      focused && styles.inputFocused, // só troca cor da borda/sombra iOS (sem alterar altura)
+      style,
+    ],
+    [focused, style]
+  );
+
   return (
-    <View style={styles.block}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
-      <View style={[styles.field, style, error && { borderColor: colors.danger }]}>
+    <View style={{ marginBottom: spacing(3) }}>
+      {!!label && (
+        <Text style={styles.label} numberOfLines={1}>
+          {label}
+        </Text>
+      )}
+
+      <View style={containerStyle}>
         <TextInput
-          ref={ref}
-          placeholderTextColor={colors.subtext}
-          secureTextEntry={hide}
           style={styles.input}
+          placeholderTextColor={colors.subtext}
+          secureTextEntry={hidden}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          value={value}
+          selectionColor={colors.brandDark}
           {...rest}
         />
-        {secureToggle ? (
-          <Text
-            onPress={() => setHide((v) => !v)}
-            style={{ color: colors.brand, fontWeight: "600" }}
-          >
-            {hide ? "Mostrar" : "Ocultar"}
-          </Text>
-        ) : null}
+
+        {showToggle && (
+          <Pressable onPress={() => setHidden((p) => !p)} hitSlop={8} style={styles.toggle}>
+            <Text style={styles.toggleText}>{hidden ? "Mostrar" : "Ocultar"}</Text>
+          </Pressable>
+        )}
       </View>
-      {error ? <Text style={styles.error}>{error}</Text> : null}
     </View>
   );
-});
-export default Input;
+}
+
+const HEIGHT = 56;
 
 const styles = StyleSheet.create({
-  block: { marginBottom: spacing(4) },
-  label: { marginBottom: spacing(2), color: colors.subtext },
-  field: {
-    height: 52,
-    borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-    paddingHorizontal: spacing(4),
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
+  label: {
+    color: colors.text,
+    marginBottom: spacing(1),
+    fontWeight: "600",
   },
-  input: { flex: 1, fontSize: 16, color: colors.text, marginRight: spacing(2) },
-  error: { color: colors.danger, marginTop: spacing(1) },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: radius.lg,
+    backgroundColor: "#fff",
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    paddingHorizontal: spacing(3),
+    height: HEIGHT, 
+  },
+  inputFocused: {
+    borderColor: colors.brand,
+    borderWidth: 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: colors.brand,
+        shadowOpacity: 0.12,
+        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 2 },
+      },
+      android: {
+      borderColor: colors.brandDark, 
+      },
+    }),
+  },
+  input: {
+    flex: 1,
+    color: colors.text,
+    paddingVertical: 0,
+    height: HEIGHT - 1.5 * 2, // mantém o cursor estável
+  },
+  toggle: {
+    paddingLeft: spacing(2),
+    paddingVertical: spacing(1),
+  },
+  toggleText: {
+    color: colors.brand,
+    fontWeight: "700",
+  },
 });

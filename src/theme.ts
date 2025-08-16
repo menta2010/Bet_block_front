@@ -1,7 +1,8 @@
 // src/theme.ts
 export const colors = {
   // marca
-  brand: "#3B6B63",      // Verde acinzentado (texto principal / botões)
+  brand: "#3B6B63", 
+  brandDark: "#2F7D67",     // Verde acinzentado (texto principal / botões)
   brandLight: "#6FA69D", // Verde claro secundário
   accent: "#3B6B63",     // Laranja pastel da flecha
   accentLight: "#FFD9B5",

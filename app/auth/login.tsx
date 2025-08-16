@@ -5,7 +5,7 @@ import {
   StyleSheet, Animated, Image
 } from "react-native";
 import { Link, useRouter } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import Screen from "@src/ui/Screen";
 import Card from "@src/ui/Card";
@@ -29,7 +29,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // animação suave do bloco central
   const fade = useRef(new Animated.Value(0)).current;
   const slide = useRef(new Animated.Value(12)).current;
   useEffect(() => {
@@ -55,30 +54,21 @@ export default function Login() {
   };
 
   return (
-<Screen padded={false}>
+    <Screen padded={false}>
       <GradientBackground />
 
       <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })} style={{ flex: 1 }}>
         <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-
-          {/* === HERO (logo + subtítulo) com respiro menor === */}
+          {/* HERO (logo + subtítulo) com respiro menor */}
           <View style={styles.hero}>
             <Image
               source={require("../../assets/branding/logo3.png")}
               style={{ width: logoSize, height: logoSize, marginBottom: 4 }}
               resizeMode="contain"
             />
-           <Text
-                    style={{
-                      color: colors.subtext,
-                      marginTop: spacing(0),
-                      textAlign: "center",
-                      fontSize: 16, // aumentei de 14 → 16
-                      fontWeight: "500", // mais destaque
-                    }}
-                  >
-            Controle suas apostas, controle seu futuro.
-          </Text>
+            <Text style={styles.subtitle}>
+              Controle suas apostas, controle seu futuro.
+            </Text>
           </View>
 
           <Card style={[styles.card, isWide && { width: 520 }, { marginTop: 14 }]}>
@@ -112,7 +102,7 @@ export default function Login() {
               onPress={onLogin}
               loading={loading}
               leftIcon={<Ionicons name="lock-closed" size={20} color="#FFFFFF" />}
-              style={{ marginTop: 8 ,  backgroundColor: "#3FA285", }}
+              style={{ marginTop: 8, backgroundColor: "#3FA285" }}
             />
 
             <Note style={{ textAlign: "center", marginTop: 16 }}>
@@ -130,27 +120,24 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center" },
-
-  // novo: menos respiro e centralização certinha
   hero: {
     alignItems: "center",
-    marginTop: 12,           // ↓ antes era spacing(4)
+    marginTop: 12,
     paddingHorizontal: 16,
   },
   subtitle: {
     color: colors.subtext,
     textAlign: "center",
-    marginTop: 4,            // ↓ antes era 2~6
+    marginTop: 4,
     lineHeight: 20,
     maxWidth: 360,
+    fontSize: 16,
+    fontWeight: "500",
   },
-
   card: {
-    marginTop: 18,           // ↓ antes spacing(6)
+    marginTop: spacing(6),
     width: "92%",
     borderRadius: 18,
     ...shadow,
   },
 });
-
-
