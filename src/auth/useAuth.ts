@@ -25,3 +25,27 @@ export async function registerApi(nome: string, email: string, senha: string) {
   const { data } = await api.post('/auth/register', { nome, email, senha }, { timeout: 10000 });
   return data;
 }
+
+
+// --- Enviar código de recuperação ---
+export async function requestPasswordResetCode(email: string): Promise<void> {
+  await api.post(
+    "/auth/request-password-reset-code",
+    { email },
+    { timeout: 10000, headers: { "Content-Type": "application/json" } }
+  );
+  // se a API retornar 4xx/5xx, o axios lança; quem chama trata via getErrorMessage
+}
+
+// --- Redefinir senha com código ---
+export async function resetPassword(payload: {
+  email: string;
+  code: string;
+  nova_senha: string;
+}): Promise<void> {
+  await api.post(
+    "/auth/reset-password",
+    payload,
+    { timeout: 10000, headers: { "Content-Type": "application/json" } }
+  );
+}
