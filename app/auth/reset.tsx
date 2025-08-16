@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  View, Text, KeyboardAvoidingView, Platform, StyleSheet, Animated, Image,
-} from "react-native";
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { View, KeyboardAvoidingView, Platform, StyleSheet, Image } from "react-native";
+import { useLocalSearchParams, Link, useRouter } from "expo-router";
+import Toast from "react-native-toast-message";
 
 import Screen from "@src/ui/Screen";
 import Card from "@src/ui/Card";
@@ -11,11 +10,11 @@ import Button from "@src/ui/Button";
 import GradientBackground from "@src/ui/GradientBackground";
 import { H1, Note } from "@src/ui/Typography";
 import { colors, spacing, shadow } from "@src/theme";
-import { getErrorMessage } from "@src/utils/getErrorMessage";
-// implemente no useAuth conforme snippet mais abaixo
-import { resetPassword } from "@src/auth/useAuth";
+import { resetPassword, requestPasswordResetCode } from "@src/auth/useAuth";
+import { Ionicons } from "@expo/vector-icons";
 
-export default function ResetPassword() {
+
+export default function Reset() {
   const router = useRouter();
   const params = useLocalSearchParams<{ email?: string }>();
 
@@ -23,31 +22,51 @@ export default function ResetPassword() {
   const [code, setCode] = useState("");
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
+  const [resending, setResending] = useState(false);
 
-  const fade = useRef(new Animated.Value(0)).current;
-  const slide = useRef(new Animated.Value(12)).current;
+  // se veio da tela de "esqueci", manter o toast de sucesso (já acontece na transição)
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fade, { toValue: 1, duration: 450, useNativeDriver: true }),
-      Animated.timing(slide, { toValue: 0, duration: 450, useNativeDriver: true }),
-    ]).start();
+    // nada a fazer aqui — apenas mantemos o comportamento atual
   }, []);
 
-  const onReset = async () => {
+  const onSubmit = async () => {
     if (!email.trim() || !code.trim() || !senha.trim()) return;
+
     try {
       setLoading(true);
-      setErr(null);
-      setOk(null);
       await resetPassword({ email: email.trim(), code: code.trim(), nova_senha: senha });
-      setOk("Senha alterada com sucesso! Faça login novamente.");
-      setTimeout(() => router.replace("/auth/login"), 700);
+
+      Toast.show({ type: "success", text1: "Senha alterada com sucesso!" });
+      router.replace("/auth/login");
     } catch (e: any) {
-      setErr(getErrorMessage(e));
+      Toast.show({
+        type: "error",
+        text1: "Erro ao redefinir",
+        text2: e?.message ?? "Tente novamente.",
+      });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onResend = async () => {
+    if (!email.trim()) {
+      Toast.show({ type: "error", text1: "Informe seu e-mail para reenviar o código." });
+      return;
+    }
+
+    try {
+      setResending(true);
+      await requestPasswordResetCode(email.trim());
+      Toast.show({ type: "success", text1: "Novo código enviado ao seu e-mail." });
+    } catch (e: any) {
+      Toast.show({
+        type: "error",
+        text1: "Não foi possível enviar",
+        text2: e?.message ?? "Tente novamente.",
+      });
+    } finally {
+      setResending(false);
     }
   };
 
@@ -55,21 +74,20 @@ export default function ResetPassword() {
     <Screen padded={false}>
       <GradientBackground />
 
-      <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })} style={{ flex: 1 }}>
-        <Animated.View style={[styles.center, { opacity: fade, transform: [{ translateY: slide }] }]}>
-          {/* Topo: logo */}
-          <View style={{ alignItems: "center", marginTop: spacing(4) }}>
-            <Image
-              source={require("../../assets/branding/logo3.png")}
-              style={{ width: 170, height: 170 }}
-              resizeMode="contain"
-            />
-            <Text style={{ color: colors.subtext, marginTop: spacing(1), textAlign: "center" }}>
-              Digite o código que você recebeu e defina uma nova senha.
-            </Text>
-          </View>
+      <KeyboardAvoidingView
+        behavior={Platform.select({ ios: "padding", android: undefined })}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.center}>
+          {/* Logo */}
+          <Image
+            source={require("../../assets/branding/logo3.png")}
+            style={{ width: 200, height: 200, marginTop: spacing(4) }}
+            resizeMode="contain"
+          />
 
-          <Card style={[styles.card]}>
+          {/* Card */}
+          <Card style={styles.card}>
             <H1 style={{ textAlign: "center", marginBottom: spacing(3), color: colors.brand }}>
               Redefinir senha
             </H1>
@@ -80,18 +98,8 @@ export default function ResetPassword() {
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
-              autoComplete="email"
-              textContentType="emailAddress"
             />
-
-            <Input
-              label="Código"
-              value={code}
-              onChangeText={setCode}
-              keyboardType="number-pad"
-              autoCapitalize="none"
-            />
-
+            <Input label="Código" value={code} onChangeText={setCode} />
             <Input
               label="Nova senha"
               value={senha}
@@ -100,33 +108,52 @@ export default function ResetPassword() {
               secureToggle
             />
 
-            {err ? <Text style={{ color: colors.danger, marginTop: spacing(2) }}>{err}</Text> : null}
-            {ok ? <Text style={{ color: colors.success, marginTop: spacing(2) }}>{ok}</Text> : null}
-
             <Button
               title="Confirmar"
-              onPress={onReset}
+              onPress={onSubmit}
               loading={loading}
-              style={{ marginTop: spacing(3) }}
+              leftIcon={<Ionicons name="checkmark-circle" size={20} color="#fff" />}
+              style={{ backgroundColor: "#3FA285", marginTop: spacing(2) }} 
+              textStyle={{ color: "#fff", fontWeight: "600" }}
             />
 
-            <Note style={{ textAlign: "center", marginTop: spacing(4) }}>
+            <Note style={{ textAlign: "center", marginTop: spacing(3) }}>
               Não recebeu o código?{" "}
-              <Link href="/auth/forgot" style={{ color: colors.brand }}>
-                Enviar novamente
+              <TextLink onPress={onResend} disabled={resending} />
+            </Note>
+
+            <Note style={{ textAlign: "center", marginTop: spacing(2) }}>
+              Lembrou a senha?{" "}
+              <Link href="/auth/login" style={{ color: colors.brand }}>
+                Voltar ao login
               </Link>
             </Note>
           </Card>
-        </Animated.View>
+        </View>
       </KeyboardAvoidingView>
     </Screen>
+  );
+}
+
+function TextLink({ onPress, disabled }: { onPress: () => void; disabled?: boolean }) {
+  return (
+    <Link
+      href="#"
+      onPress={(e) => {
+        e.preventDefault();
+        if (!disabled) onPress();
+      }}
+      style={{ color: colors.brand, opacity: disabled ? 0.6 : 1 }}
+    >
+      Enviar novamente
+    </Link>
   );
 }
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center" },
   card: {
-    marginTop: spacing(4),
+    marginTop: spacing(2),
     width: "92%",
     borderRadius: 18,
     ...shadow,
