@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,10 @@ import {
   Pressable,
   StyleSheet,
   Platform,
+  Animated,
+  Easing,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { colors, spacing, radius } from "@src/theme";
 
 type Props = TextInputProps & {
@@ -29,7 +32,6 @@ export default function Input({
   const [focused, setFocused] = useState(false);
   const [hidden, setHidden] = useState(!!secureTextEntry);
 
-  // Mostra "Mostrar/Ocultar" só se houver texto
   const showToggle =
     !!secureToggle && typeof value === "string" && value.length > 0;
 
@@ -43,13 +45,51 @@ export default function Input({
   };
 
   const containerStyle = useMemo(
-    () => [
-      styles.inputContainer,
-      focused && styles.inputFocused,
-      style,
-    ],
+    () => [styles.inputContainer, focused && styles.inputFocused, style],
     [focused, style]
   );
+
+  // animação do olho
+  const pressAnim = useRef(new Animated.Value(0)).current;
+  const animateEye = () => {
+    Animated.sequence([
+      Animated.timing(pressAnim, {
+        toValue: 1,
+        duration: 110,
+        easing: Easing.out(Easing.quad),
+        useNativeDriver: true,
+      }),
+      Animated.timing(pressAnim, {
+        toValue: 0,
+        duration: 110,
+        easing: Easing.in(Easing.quad),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const eyeStyle = {
+    transform: [
+      {
+        scale: pressAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 0.92],
+        }),
+      },
+      {
+        rotate: pressAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: ["0deg", "-8deg"],
+        }),
+      },
+    ],
+    opacity: pressAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0.9],
+    }),
+  };
+
+  const effectiveSecure = secureTextEntry ? hidden : false;
 
   return (
     <View style={{ marginBottom: spacing(3) }}>
@@ -63,23 +103,31 @@ export default function Input({
         <TextInput
           style={styles.input}
           placeholderTextColor={colors.subtext}
-          secureTextEntry={hidden}
+          secureTextEntry={effectiveSecure}
           onFocus={handleFocus}
           onBlur={handleBlur}
           value={value}
-          selectionColor={colors.brandDark} // cursor/seleção verde-escuro
+          selectionColor={colors.brandDark}
           {...rest}
         />
 
         {showToggle && (
           <Pressable
-            onPress={() => setHidden((p) => !p)}
+            onPress={() => {
+              setHidden((p) => !p);
+              animateEye();
+            }}
             hitSlop={8}
             style={styles.toggle}
           >
-            <Text style={styles.toggleText}>
-              {hidden ? "Mostrar" : "Ocultar"}
-            </Text>
+            <Animated.View style={[eyeStyle, styles.eyeWrap]}>
+              <Ionicons
+                name={hidden ? "eye-off" : "eye"}
+                size={20}
+                color={colors.brand}
+              />
+            </Animated.View>
+            <Text style={styles.toggleText}>{hidden ? "Mostrar" : "Ocultar"}</Text>
           </Pressable>
         )}
       </View>
@@ -87,7 +135,7 @@ export default function Input({
   );
 }
 
-const HEIGHT = 26; // altura confortável e padrão
+const HEIGHT = 44;
 
 const styles = StyleSheet.create({
   label: {
@@ -95,8 +143,6 @@ const styles = StyleSheet.create({
     marginBottom: spacing(1),
     fontWeight: "600",
   },
-
-  // A BORDA fica aqui no container
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -107,8 +153,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing(3),
     minHeight: HEIGHT,
   },
-
-  // Estado focado (sem mudar altura)
   inputFocused: {
     borderColor: colors.brand,
     borderWidth: 2,
@@ -121,26 +165,27 @@ const styles = StyleSheet.create({
       },
       android: {
         borderColor: colors.brandDark,
-        // ripple visual já vem do sistema nos botões; aqui só borda mesmo
       },
     }),
   },
-
-  // O TextInput em si NÃO tem borda nem radius
   input: {
     flex: 1,
     color: colors.text,
     fontSize: 16,
     paddingVertical: 0,
-    height: 44, // deixa o cursor estável e o campo mais “slim”
+    height: HEIGHT,
     ...Platform.select({
       android: { textAlignVertical: "center", includeFontPadding: false },
     }),
   },
-
   toggle: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingLeft: spacing(2),
     paddingVertical: spacing(1),
+  },
+  eyeWrap: {
+    marginRight: spacing(1),
   },
   toggleText: {
     color: colors.brand,
