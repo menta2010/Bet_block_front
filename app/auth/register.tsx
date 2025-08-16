@@ -23,6 +23,7 @@ import { colors, spacing, shadow } from "@src/theme";
 import { useAuth, registerApi, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
 import GoogleButton from "@src/ui/GoogleButton";
+import FormScroll from "@src/ui/FormScroll";
 
 export default function Register() {
   const { width } = useWindowDimensions();
@@ -69,6 +70,7 @@ export default function Register() {
   };
 
   return (
+     <FormScroll>
     <Screen padded={false}>
       <GradientBackground />
 
@@ -145,6 +147,7 @@ export default function Register() {
         </Animated.View>
       </KeyboardAvoidingView>
     </Screen>
+    </FormScroll>
   );
 }
 

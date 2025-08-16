@@ -17,6 +17,7 @@ import { colors, spacing, shadow } from "@src/theme";
 import { useAuth, loginApi } from "@src/auth/useAuth";
 import { getErrorMessage } from "@src/utils/getErrorMessage";
 import GoogleButton from "@src/ui/GoogleButton";
+import FormScroll from "@src/ui/FormScroll";
 
 export default function Login() {
   const { width } = useWindowDimensions();
@@ -61,6 +62,7 @@ export default function Login() {
   };
 
   return (
+     <FormScroll>
     <Screen padded={false}>
       <GradientBackground />
 
@@ -127,21 +129,12 @@ export default function Login() {
       </View>
 
             {/* botão Google (UI) */}
-        <Button
-          title="Continuar com Google"
-          onPress={onGooglePress}
-          leftIcon={<Ionicons name="logo-google" size={20} color="#DB4437" />}
-          style={{
-            backgroundColor: "#fff",       // fundo branco padrão Google
-            borderWidth: 1,
-            borderColor: colors.border,
-            marginTop: 8,
-          }}
-          textStyle={{
-            color: "#000",                 // texto preto (padrão Google)
-            fontWeight: "600",
-          }}
-        />
+              {/* Botão Google (placeholder) */}
+                    <GoogleButton
+                      onPress={onGooglePress}        // sua função atual
+                      style={{ marginTop: 12 }}      // opcional
+                      // loading={isGoogleLoading}    // opcional
+                    />
 
             <Note style={{ textAlign: "center", marginTop: 16 }}>
               Não tem conta?{" "}
@@ -153,6 +146,7 @@ export default function Login() {
         </Animated.View>
       </KeyboardAvoidingView>
     </Screen>
+    </FormScroll>
   );
 }
 

@@ -12,6 +12,7 @@ import { H1, Note } from "@src/ui/Typography";
 import { colors, spacing, shadow } from "@src/theme";
 import { resetPassword, requestPasswordResetCode } from "@src/auth/useAuth";
 import { Ionicons } from "@expo/vector-icons";
+import FormScroll from "@src/ui/FormScroll";
 
 
 export default function Reset() {
@@ -71,6 +72,7 @@ export default function Reset() {
   };
 
   return (
+    <FormScroll>
     <Screen padded={false}>
       <GradientBackground />
 
@@ -133,6 +135,7 @@ export default function Reset() {
         </View>
       </KeyboardAvoidingView>
     </Screen>
+    </FormScroll>
   );
 }
 

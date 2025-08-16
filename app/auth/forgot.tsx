@@ -12,6 +12,7 @@ import { H1, Note } from "@src/ui/Typography";
 import { colors, spacing, shadow } from "@src/theme";
 import { requestPasswordResetCode } from "@src/auth/useAuth";
 import { Ionicons } from "@expo/vector-icons";
+import FormScroll from "@src/ui/FormScroll";
 
 export default function Forgot() {
   const router = useRouter();
@@ -47,6 +48,7 @@ export default function Forgot() {
   };
 
   return (
+     <FormScroll>
     <Screen padded={false}>
       <GradientBackground />
 
@@ -104,6 +106,7 @@ export default function Forgot() {
         </View>
       </KeyboardAvoidingView>
     </Screen>
+    </FormScroll>
   );
 }
 
