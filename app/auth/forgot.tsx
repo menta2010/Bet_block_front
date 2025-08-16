@@ -63,7 +63,7 @@ export default function Forgot() {
           />
 
           {/* Card */}
-          <Card style={styles.card}>
+           <Card style={[styles.card, { marginTop: 32 }]}>
             <H1 style={{ textAlign: "center", marginBottom: spacing(3), color: colors.brand }}>
               Esqueci minha senha
             </H1>
@@ -74,13 +74,14 @@ export default function Forgot() {
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
+              style={{ marginBottom: 20 }}
             />
             <Button
             title="Enviar código"
             onPress={onSubmit}
             loading={loading}
             leftIcon={<Ionicons name="mail" size={20} color="#FFFFFF" />} // opcional, se quiser ícone igual estilo login
-            style={{ backgroundColor: "#3FA285", marginTop: spacing(2) }} // cor igual do login
+            style={{ backgroundColor: "#3FA285", marginTop: spacing(2), marginBottom: 16 }} // cor igual do login
             textStyle={{ color: "#FFFFFF", fontWeight: "600" }} // garante texto branco
             />
 

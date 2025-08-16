@@ -1,7 +1,7 @@
 // src/theme.ts
 export const colors = {
   // marca
-  brand: "#3B6B63", 
+  brand: "#2F7D67", 
   brandDark: "#2F7D67",     // Verde acinzentado (texto principal / botões)
   brandLight: "#6FA69D", // Verde claro secundário
   accent: "#3B6B63",     // Laranja pastel da flecha
@@ -36,8 +36,27 @@ export const shadow = {
 };
 
 export const typography = {
-  h1: { fontSize: 28, fontWeight: "800" as const, color: colors.text },
-  h2: { fontSize: 22, fontWeight: "700" as const, color: colors.text },
-  body: { fontSize: 16, color: colors.text },
-  note: { fontSize: 14, color: colors.subtext },
+  h1: {
+    fontSize: 25,           // um pouquinho maior pra destacar bem
+    fontWeight: "800" as const,
+    letterSpacing: -0.5,    // deixa moderno e compacto
+    color: colors.text,
+  },
+  h2: {
+    fontSize: 22,
+    fontWeight: "700" as const,
+    letterSpacing: -0.25,
+    color: colors.text,
+  },
+  body: {
+    fontSize: 16,
+    fontWeight: "400" as const, // deixa o body mais leve
+    lineHeight: 22,             // melhora leitura de textos longos
+    color: colors.text,
+  },
+  note: {
+    fontSize: 14,
+    fontWeight: "400" as const,
+    color: colors.subtext,
+  },
 };

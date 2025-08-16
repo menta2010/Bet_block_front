@@ -72,12 +72,9 @@ export default function Login() {
               style={{ width: logoSize, height: logoSize, marginBottom: 4 }}
               resizeMode="contain"
             />
-            <Text style={styles.subtitle}>
-              Controle suas apostas, controle seu futuro.
-            </Text>
           </View>
 
-          <Card style={[styles.card, isWide && { width: 520 }, { marginTop: 14 }]}>
+          <Card style={[styles.card, isWide && { width: 520 }, { marginTop: 32 }]}>
             <H1 style={{ textAlign: "center", marginBottom: 20 }}>
               Entrar
             </H1>
@@ -88,6 +85,7 @@ export default function Login() {
               onChangeText={setEmail}
               autoCapitalize="none"
               keyboardType="email-address"
+              style={{ marginBottom: 12 }}
             />
 
             <Input
@@ -96,6 +94,7 @@ export default function Login() {
               onChangeText={setSenha}
               secureTextEntry
               secureToggle
+              style={{ marginBottom: 3 }}
             />
 
             {/* link “Esqueceu sua senha?” alinhado à direita */}
@@ -117,7 +116,7 @@ export default function Login() {
               onPress={onLogin}
               loading={loading}
               leftIcon={<Ionicons name="lock-closed" size={20} color="#FFFFFF" />}
-              style={{ marginTop: 8, backgroundColor: "#3FA285" }}
+              style={{ marginTop: 16, backgroundColor: "#3FA285" }}
             />
 
             {/* separador “ou” */}

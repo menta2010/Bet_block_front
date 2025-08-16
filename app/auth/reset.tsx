@@ -87,7 +87,7 @@ export default function Reset() {
           />
 
           {/* Card */}
-          <Card style={styles.card}>
+         <Card style={[styles.card, { marginTop: 32 }]}>
             <H1 style={{ textAlign: "center", marginBottom: spacing(3), color: colors.brand }}>
               Redefinir senha
             </H1>
@@ -99,13 +99,14 @@ export default function Reset() {
               autoCapitalize="none"
               keyboardType="email-address"
             />
-            <Input label="Código" value={code} onChangeText={setCode} />
+            <Input label="Código" value={code} onChangeText={setCode}  style={{ marginBottom: 12 }}/>
             <Input
               label="Nova senha"
               value={senha}
               onChangeText={setSenha}
               secureTextEntry
               secureToggle
+                style={{ marginBottom: 20 }}
             />
 
             <Button
@@ -113,7 +114,7 @@ export default function Reset() {
               onPress={onSubmit}
               loading={loading}
               leftIcon={<Ionicons name="checkmark-circle" size={20} color="#fff" />}
-              style={{ backgroundColor: "#3FA285", marginTop: spacing(2) }} 
+              style={{ backgroundColor: "#3FA285", marginTop: spacing(2), marginBottom: 16  }} 
               textStyle={{ color: "#fff", fontWeight: "600" }}
             />
 

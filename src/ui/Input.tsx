@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
-    borderRadius: radius.md,
+    borderRadius: radius.lg,
     borderWidth: 1.5,
     borderColor: colors.border,
     paddingHorizontal: spacing(3),
@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: colors.brand,
-        shadowOpacity: 0.12,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 3 },
       },
       android: {
         borderColor: colors.brandDark,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     color: colors.text,
     fontSize: 16,
     paddingVertical: 0,
-    height: 48, // deixa o cursor estável e o campo mais “slim”
+    height: 44, // deixa o cursor estável e o campo mais “slim”
     ...Platform.select({
       android: { textAlignVertical: "center", includeFontPadding: false },
     }),

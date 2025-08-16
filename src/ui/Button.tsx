@@ -60,11 +60,22 @@ export default function Button({
 
 const styles = StyleSheet.create({
   base: {
-    height: 52,
+    height: 48,
     borderRadius: radius.lg,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing(6),
+  },
+  primary: {
+    backgroundColor: colors.brandDark, // verde
+  },
+    textPrimary: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  disabled: {
+    backgroundColor: "#A5D6A7", // verde claro
   },
   content: { flexDirection: "row", alignItems: "center", justifyContent: "center" },
   label: { fontSize: 16, fontWeight: "700" },

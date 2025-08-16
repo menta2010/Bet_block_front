@@ -83,12 +83,9 @@ export default function Register() {
               style={{ width: logoSize, height: logoSize, marginBottom: 4 }}
               resizeMode="contain"
             />
-            <Text style={styles.subtitle}>
-              Crie sua conta e controle suas apostas.
-            </Text>
           </View>
 
-          <Card style={[styles.card, { marginTop: 14 }]}>
+          <Card style={[styles.card, { marginTop: 32 }]}>
             <H1 style={{ textAlign: "center", marginBottom: 20 }}>
               Criar conta
             </H1>
